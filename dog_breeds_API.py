@@ -21,7 +21,7 @@ def read_image(content):
     return image
 
 def load_model():
-    model=keras.models.load_model('model_lite.h5')
+    model=keras.models.load_model('mymodel.h5')
     return model
 
 def predict(image,model):
@@ -40,16 +40,10 @@ async def hello_world():
 
 @app.post("/predict/image")
 async def predict_api(file: UploadFile = File(...)):
-    image=read_image(await file.read())
-    #model=load_model()
-    model = keras.models.load_model('mymodel.h5')
-    '''try:
-        model=keras.models.load_model('mymodel.h5')
-    except Exception as e:
-        return str(e)'''
+    try:
+        image=read_image(await file.read())
+    except:
+        return "Invalid , please make sure that you have imported an image file"
+    model=load_model()
     output=predict(image,model)
     return output
-    # async def predict_api():
-    #    return "hossam"
-#if __name__ =="__main__":
- #   uvicorn.run(app , port=8000 ,host='0.0.0.0')
